@@ -11,20 +11,35 @@ namespace AdventOfCode
     public static void RunPart1()
     {
       var lines = File.ReadAllLines("./PuzzleInputDay6.txt").ToList();
+      var fishNumbers = lines[0].Split(',').Select(int.Parse).ToList();
+
+
+      for(int day = 0; day < 80; ++day)
+      {
+        var newFish = fishNumbers.Count(f => f == 0);
+        fishNumbers = fishNumbers.Select(f => f == 0 ? 6 : f - 1).Concat(Enumerable.Repeat(8, newFish)).ToList();
+      }
+
+      Console.WriteLine(fishNumbers.Count());
+    }
+
+    public static void RunPart2()
+    {
+      var lines = File.ReadAllLines("./PuzzleInputDay6.txt").ToList();
       var fishNumbers = lines[0].Split(',').Select(long.Parse).ToList();
 
       var fishNumbersDict = fishNumbers.GroupBy(f => f).ToDictionary(f => f.Key, f => (long)f.Count());
-      for(int index = 0; index <= 8; ++index)
+      for (int index = 0; index <= 8; ++index)
       {
-        if(!fishNumbersDict.ContainsKey(index))
+        if (!fishNumbersDict.ContainsKey(index))
         {
           fishNumbersDict[index] = 0;
         }
       }
 
-      for(int day = 0; day < 256; ++day)
+      for (int day = 0; day < 256; ++day)
       {
-        fishNumbersDict = new Dictionary<long, long> { 
+        fishNumbersDict = new Dictionary<long, long> {
           { 0L, fishNumbersDict[1] } ,
           { 1L, fishNumbersDict[2] } ,
           { 2L, fishNumbersDict[3] } ,
@@ -49,10 +64,6 @@ namespace AdventOfCode
         fishNumbersDict[7] +
         fishNumbersDict[8]
         );
-    }
-
-    public static void RunPart2()
-    {
     }
 
 
