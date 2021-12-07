@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -32,27 +33,51 @@ namespace AdventOfCode
     public static void RunPart2()
     {
       var lines = File.ReadAllLines("./PuzzleInputDay7.txt").ToList();
-      var positions = lines[0].Split(',').Select(int.Parse).ToList();
-      var maxPosition = positions.Max();
+      var sw = Stopwatch.StartNew();
+      var positions = lines[0].Split(',').Select(int.Parse).GroupBy(p => p).ToDictionary(g => g.Key, g => g.Count());
+      var maxPosition = positions.Keys.Max();
+
+      var lowerCache = new int[maxPosition+1];
+      var upperCache = new int[maxPosition+1];
+
+      var triangleDistance = 0;
+      var numberOfCrabs = 0;
+      for(int index = 0; index <= maxPosition; ++index)
+      {
+        triangleDistance += numberOfCrabs;
+
+        lowerCache[index] = (index == 0 ? 0 : lowerCache[index - 1]) + triangleDistance;
+
+        positions.TryGetValue(index, out var newCrabs);
+        numberOfCrabs += newCrabs;
+      }
+
+      triangleDistance = 0;
+      numberOfCrabs = 0;
+      for(int index = maxPosition; index >= 0; --index)
+      {
+        triangleDistance += numberOfCrabs;
+
+        upperCache[index] = (index == maxPosition ? 0 : upperCache[index + 1]) + triangleDistance;
+
+        positions.TryGetValue(index, out var newCrabs);
+        numberOfCrabs += newCrabs;
+      }
 
       var targetX = -1L;
       var leastFuel = long.MaxValue;
-      var fuelCosts = new Dictionary<int, long>();
-      fuelCosts[0] = 0;
-      for (int x = 1; x <= maxPosition; ++x)
-      {
-        fuelCosts[x] = fuelCosts[x - 1] + x;
-      }
 
       for (int x = 0; x <= maxPosition; ++x)
       {
-        var thisFuel = positions.Sum(p => fuelCosts[Math.Abs(x - p)]);
+        var thisFuel = lowerCache[x] + upperCache[x];
         if (thisFuel < leastFuel)
         {
           leastFuel = thisFuel;
           targetX = x;
         }
       }
+      var ms = sw.ElapsedMilliseconds;
+      Console.WriteLine(ms);
       Console.WriteLine(leastFuel);
     }
   }
