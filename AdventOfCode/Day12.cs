@@ -72,8 +72,8 @@ namespace AdventOfCode
 
     public static void RunPart2()
     {
-      var sw = Stopwatch.StartNew();
       var lines = File.ReadAllLines("./PuzzleInputDay12.txt").ToList();
+      var sw = Stopwatch.StartNew();
       var caves = new Dictionary<string, Cave>();
 
       foreach (var line in lines)
