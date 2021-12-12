@@ -26,11 +26,11 @@ namespace AdventOfCode
       }
 
       var startCave = GetCave(caves, "start");
-      int paths = GetPaths(startCave, new Cave[0]);
+      int paths = GetPaths(startCave, new Stack<Cave>(), new List<Cave>(), false);
       Console.WriteLine(paths);
     }
 
-    private static int GetPaths(Cave currentCave, IEnumerable<Cave> visitedCaves, bool canVisitSmallCaveTwice = false)
+    private static int GetPaths(Cave currentCave, Stack<Cave> visitedCaves, IEnumerable<Cave> cavesThatCantBeDoubled, bool canVisitSmallCaveTwice = false)
     {
       if(currentCave.Name == "end")
       {
@@ -39,17 +39,23 @@ namespace AdventOfCode
       }
 
       var paths = 0;
+      currentCave.TimesVisited++;
       foreach(var nextCave in currentCave.ConnectedCaves)
       {
-        if(nextCave.IsBig || !visitedCaves.Contains(nextCave))
+        if(nextCave.IsBig || nextCave.TimesVisited == 0)
         {
-          paths += GetPaths(nextCave, visitedCaves.Concat(new[] { currentCave }), canVisitSmallCaveTwice);
+          visitedCaves.Push(currentCave); 
+          paths += GetPaths(nextCave, visitedCaves, cavesThatCantBeDoubled, canVisitSmallCaveTwice);
+          visitedCaves.Pop();
         }
-        else if(canVisitSmallCaveTwice && !new string[] { "start", "end" }.Contains(nextCave.Name))
+        else if(canVisitSmallCaveTwice && nextCave.TimesVisited == 1)
         {
-          paths += GetPaths(nextCave, visitedCaves.Concat(new[] { currentCave }), false);
+          visitedCaves.Push(currentCave);
+          paths += GetPaths(nextCave, visitedCaves,cavesThatCantBeDoubled, false);
+          visitedCaves.Pop();
         }
       }
+      currentCave.TimesVisited--;
      
       return paths;
     }
@@ -66,6 +72,7 @@ namespace AdventOfCode
 
     public static void RunPart2()
     {
+      var sw = Stopwatch.StartNew();
       var lines = File.ReadAllLines("./PuzzleInputDay12.txt").ToList();
       var caves = new Dictionary<string, Cave>();
 
@@ -80,7 +87,9 @@ namespace AdventOfCode
       }
 
       var startCave = GetCave(caves, "start");
-      int paths = GetPaths(startCave, new Cave[0], true);
+      var endCave = GetCave(caves, "end");
+      int paths = GetPaths(startCave, new Stack<Cave>(), new List<Cave> { startCave, endCave }, true);
+      Console.WriteLine(sw.ElapsedMilliseconds);
       Console.WriteLine(paths);
     }
 
@@ -88,6 +97,7 @@ namespace AdventOfCode
     {
       public string Name { get; set; } 
       public bool IsBig { get; set; }
+      public int TimesVisited { get; set; }
 
       public List<Cave> ConnectedCaves { get; set; } = new List<Cave>();
 
