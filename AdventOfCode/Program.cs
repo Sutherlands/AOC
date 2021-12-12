@@ -8,7 +8,7 @@ namespace AdventOfCode
   {
     static void Main(string[] args)
     {
-      Day11.RunPart1();
+      Day12.RunPart2();
     }
   }
 }
