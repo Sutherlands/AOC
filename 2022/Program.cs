@@ -7,7 +7,7 @@ namespace _2022
   {
     static void Main(string[] args)
     {
-      Day2.RunPart2();
+      Day5.RunPart2();
     }
   }
 }
