@@ -22,6 +22,7 @@ namespace AdventOfCode
 
       foreach (var line in lines)
       {
+        File.AppendAllText("notmatts.txt", $"Starting command {line}{Environment.NewLine}");
         var split = line.Split(" ");
         var direction = split[0];
         var amount = int.Parse(split[1]);

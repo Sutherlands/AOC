@@ -42,6 +42,7 @@ public class MattsDay9
     Point LastHead { get; set; }
     public void Move(char direction, int distance)
     {
+      File.AppendAllText("matts.txt", $"Starting command {direction} {distance}{Environment.NewLine}");
       int xDir = 0;
       int yDir = 0;
       switch (direction)
@@ -72,7 +73,7 @@ public class MattsDay9
         }
         else if (xDist != 0) Tail.x += Math.Sign(xDist);
         else if (yDist != 0) Tail.y += Math.Sign(yDist);
-        //File.AppendAllText("matts.txt", $"({Tail.x},{Tail.y}){Environment.NewLine}");
+        File.AppendAllText("matts.txt", $"({Tail.x},{Tail.y}){Environment.NewLine}");
       }
       TailLocations.Add(new Point(Tail));
     }
