@@ -72,6 +72,7 @@ public class MattsDay9
         }
         else if (xDist != 0) Tail.x += Math.Sign(xDist);
         else if (yDist != 0) Tail.y += Math.Sign(yDist);
+        File.AppendAllText("matts.txt", $"({Tail.x},{Tail.y}){Environment.NewLine}");
       }
       TailLocations.Add(new Point(Tail));
     }
