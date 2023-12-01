@@ -18,16 +18,12 @@ namespace _2023
       Console.WriteLine(sum);
     }
 
-    static Regex regex = new Regex(@"(one|two|three|four|five|six|seven|eight|nine|\d)");
+    static Regex regex = new Regex(@"(?=(one|two|three|four|five|six|seven|eight|nine|\d))");
 
     public static void RunPart2()
     {
       var lines = File.ReadAllLines("./PuzzleInputDay1.txt").ToList();
-      lines = lines.Select(line => { var matches = regex.Matches(line); return GetValue(matches.First().Value) + GetValue(matches.Last().Value); }).ToList();
-      foreach(var line in lines)
-      {
-        Console.WriteLine(line);
-      }
+      lines = lines.Select(line => { var matches = regex.Matches(line); return GetValue(matches.First().Groups[1].Value) + GetValue(matches.Last().Groups[1].Value); }).ToList();
       var sum = lines.Sum(l => int.Parse(l));
       Console.WriteLine(sum);
     }
