@@ -1,12 +1,12 @@
 ﻿using System;
 
-namespace _2023
+namespace _2024
 {
   class Program
   {
     static void Main(string[] args)
     {
-      Day16.RunPart2();
+      Day2.RunPart2();
     }
   }
 }
