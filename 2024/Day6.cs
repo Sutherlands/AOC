@@ -16,10 +16,10 @@ namespace _2024
 
     public static void RunPart1()
     {
-      var lines = File.ReadAllLines("./PuzzleInputDay6.txt").Select(l => l.ToList()).ToList();
+      var lines = File.ReadAllLines("./PuzzleInputDay6.txt").Select(l => l.Replace('.', '\0').ToList()).ToList();
       var position = GetInitialPosition(lines);
       RunAlgorithm(lines, position);
-      var count = lines.SelectMany(l => l).Count(c => c == '!');
+      var count = lines.SelectMany(l => l).Count(c => c != '\0' && c != '#');
       Console.WriteLine(count);
     }
 
