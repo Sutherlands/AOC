@@ -6,7 +6,7 @@ namespace _2024
   {
     static void Main(string[] args)
     {
-      Day14.RunPart2();
+      Day16.RunPart2();
     }
   }
 }
