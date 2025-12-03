@@ -1,2 +1,2 @@
 ﻿using _2025;
-Day2.RunPart2();
+Day3.RunPart2();
